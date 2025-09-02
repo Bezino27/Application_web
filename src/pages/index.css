@@ -1,10 +1,14 @@
-/* src/pages/index.css */
-body, html {
+:root {
+    --red: #D32F2F;
+    --dark: #111;
+    --white: #fff;
+}
+
+body {
     margin: 0;
-    padding: 0;
     font-family: 'Segoe UI', sans-serif;
-    background-color: #fafafa;
-    color: #222;
+    color: var(--dark);
+    background: #f8f8f8;
 }
 
 a {
@@ -13,20 +17,20 @@ a {
 }
 
 .header {
-    background-color: white;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: 100;
 }
 
 .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
     max-width: 1200px;
     margin: auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem;
 }
 
 .logo {
@@ -40,11 +44,10 @@ a {
 }
 
 .login-button {
-    background-color: #D32F2F;
+    background: var(--red);
     color: white;
     padding: 0.5rem 1rem;
     border-radius: 6px;
-    font-weight: bold;
 }
 
 .burger {
@@ -52,22 +55,39 @@ a {
     background: none;
     border: none;
     font-size: 2rem;
-    cursor: pointer;
 }
 
 .hero {
+    position: relative;
+    background: linear-gradient(135deg, var(--red), var(--dark));
+    color: white;
+    padding: 4rem 2rem;
+}
+
+.overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    opacity: 0.15;
+    background-repeat: no-repeat;
+    background-image: url('../assets/ludimus.png');
+    background-size: 650px;
+    background-position: center;
+    z-index: 0;
+}
+.hero-content {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: auto;
     gap: 2rem;
-    padding: 4rem 2rem;
-    background: linear-gradient(to right, #ffe3e3, #fff);
+    align-items: center;
+    justify-content: space-between;
 }
 
 .hero-text {
     flex: 1 1 400px;
-    max-width: 500px;
 }
 
 .hero-text h1 {
@@ -80,33 +100,45 @@ a {
     margin-bottom: 1rem;
 }
 
-.slogan {
+.slogan-block {
+    margin: 1rem 0;
+    line-height: 2;
+    font-size: 1.5rem;
+}
+
+.red-letter {
+    color: var(--red);
+    font-weight: bold;
+}
+
+.latin {
     font-style: italic;
-    color: #555;
+    font-size: 1rem;
+    color: #ddd;
+    margin-bottom: 1.5rem;
 }
 
 .cta {
     display: inline-block;
-    background-color: #D32F2F;
-    color: white;
+    background: white;
+    color: var(--red);
     padding: 0.8rem 1.5rem;
     border-radius: 8px;
     font-weight: bold;
-    margin-top: 1rem;
 }
 
 .hero-image img {
     max-width: 400px;
     width: 100%;
     border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
 }
 
-.features, .values, .video, .stats {
+.features, .video, .stats {
+    padding: 4rem 2rem;
     max-width: 1000px;
     margin: auto;
-    padding: 4rem 1rem;
     text-align: center;
+    background: white;
 }
 
 .feature-grid {
@@ -116,38 +148,20 @@ a {
     margin-top: 2rem;
 }
 
-.value-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 2rem;
-    list-style: none;
-    padding: 0;
-}
-
-.value-list li {
-    background-color: #f3f3f3;
-    padding: 1rem 1.5rem;
-    border-radius: 10px;
-    font-weight: bold;
-}
-
 .video-wrapper {
     position: relative;
     padding-bottom: 56.25%;
     height: 0;
     overflow: hidden;
     border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    margin-top: 2rem;
 }
 
 .video-wrapper iframe {
     position: absolute;
     width: 100%;
     height: 100%;
-    left: 0;
-    top: 0;
+    top: 0; left: 0;
 }
 
 .stat-grid {
@@ -159,18 +173,17 @@ a {
 }
 
 .stat-grid div {
-    background-color: #fefefe;
+    background: #f0f0f0;
     padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border-radius: 10px;
     min-width: 150px;
 }
 
 .footer {
-    background-color: #222;
+    background: var(--dark);
     color: white;
     text-align: center;
-    padding: 2rem 1rem;
+    padding: 2rem;
 }
 
 /* Responsive nav */
@@ -179,12 +192,11 @@ a {
         position: absolute;
         top: 64px;
         right: 0;
-        background-color: white;
+        background: white;
         flex-direction: column;
-        gap: 1rem;
+        align-items: flex-end;
         padding: 1rem 2rem;
         display: none;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
 
     .nav.open {
