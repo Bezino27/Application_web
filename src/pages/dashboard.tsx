@@ -47,26 +47,31 @@ export default function DashboardPage() {
         }
 
         result.sort((a, b) => {
-            const aValue = a[sortKey];
-            const bValue = b[sortKey];
+            switch (sortKey) {
+                case 'birth_date': {
+                    const aDate = a.birth_date ? new Date(a.birth_date).getTime() : 0;
+                    const bDate = b.birth_date ? new Date(b.birth_date).getTime() : 0;
+                    return sortDirection === 'asc' ? aDate - bDate : bDate - aDate;
+                }
 
-            if (sortKey === 'birth_date') {
-                const aDate = aValue ? new Date(aValue).getTime() : 0;
-                const bDate = bValue ? new Date(bValue).getTime() : 0;
-                return sortDirection === 'asc' ? aDate - bDate : bDate - aDate;
+                case 'all_payments_paid': {
+                    return sortDirection === 'asc'
+                        ? Number(a.all_payments_paid) - Number(b.all_payments_paid)
+                        : Number(b.all_payments_paid) - Number(a.all_payments_paid);
+                }
+
+                case 'name': {
+                    return sortDirection === 'asc'
+                        ? a.name.localeCompare(b.name)
+                        : b.name.localeCompare(a.name);
+                }
+
+                case 'number': {
+                    return sortDirection === 'asc'
+                        ? a.number.localeCompare(b.number)
+                        : b.number.localeCompare(a.number);
+                }
             }
-
-            if (sortKey === 'all_payments_paid') {
-                return sortDirection === 'asc'
-                    ? Number(aValue) - Number(bValue)
-                    : Number(bValue) - Number(aValue);
-            }
-
-            const aStr = aValue ? String(aValue) : '';
-            const bStr = bValue ? String(bValue) : '';
-            return sortDirection === 'asc'
-                ? aStr.localeCompare(bStr)
-                : bStr.localeCompare(aStr);
         });
 
         setFiltered(result);

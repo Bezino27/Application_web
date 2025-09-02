@@ -37,14 +37,11 @@ export default function LoginPage() {
                 if (!profileRes.ok) throw new Error("Nepodarilo sa načítať profil");
 
                 const user = await profileRes.json();
-
-                login(data.access, user); // uloženie do AuthContext
+                login(data.access, user);
                 navigate('/dashboard');
             } else {
                 setError('Neplatné meno alebo heslo.');
             }
-        } catch (err) {
-            setError('Chyba spojenia alebo servera.');
         } finally {
             setLoading(false);
         }
