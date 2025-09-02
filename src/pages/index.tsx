@@ -1,6 +1,5 @@
 import './index.css';
 import logo from '../assets/nazov-black.png';
-import heroImage from '../assets/ludimus.png';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 
