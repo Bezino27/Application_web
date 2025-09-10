@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useState } from 'react';
 import { fetchWithAuth } from '../fetchWithAuth';
 import './AdminOrdersPage.css';
+import Layout from '../components/layout.tsx';
 
 type ProductType = 'stick' | 'apparel' | 'blade' | 'other';
 
@@ -116,6 +117,7 @@ export default function AdminClubOrdersPage() {
     };
 
     return (
+        <Layout>
         <div className="page">
             <div className="row between center" style={{ marginBottom: 16 }}>
                 <h2>Objednávky klubu</h2>
@@ -248,5 +250,6 @@ export default function AdminClubOrdersPage() {
                 </div>
             )}
         </div>
+        </Layout>
     );
 }
