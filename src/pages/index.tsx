@@ -36,6 +36,8 @@ export default function HomePage() {
                             <div><span className="red-letter">M</span>oderný</div>
                             <div><span className="red-letter">U</span>nikátny</div>
                             <div><span className="red-letter">S</span>poľahlivý</div>
+                            <div><span className="red-letter">S</span>poľahlivý</div>
+
                         </div>
                         <p className="latin">Simul ludimus, simul vincimus</p>
                         <Link to="/login" className="cta">Začať používať</Link>
@@ -49,7 +51,7 @@ export default function HomePage() {
                     <div><h3>Dochádzka</h3><p>Jednoduchá a prehľadná evidencia tréningov a zápasov.</p></div>
                     <div><h3>Platby</h3><p>Automatická kontrola platieb, notifikácie, prehľad.</p></div>
                     <div><h3>Notifikácie</h3><p>Push správy pre hráčov aj trénerov v reálnom čase.</p></div>
-                    <div><h3>Mobilná appka</h3><p>Dostupná pre Android aj iOS. Každý hráč má profil.</p></div>
+                    <div><h3>Mobilná appka</h3><p>Dostupná pre Android aj iOS. Každý hráč má profil..</p></div>
                 </div>
             </section>
 
