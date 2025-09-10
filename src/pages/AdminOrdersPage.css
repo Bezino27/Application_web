@@ -1,0 +1,9 @@
+.page { padding: 20px; }
+.row { display: flex; }
+.between { justify-content: space-between; }
+.center { align-items: center; }
+.gap { gap: 10px; }
+.card { background: #fff; border: 1px solid #e0e0e0; border-radius: 10px; padding: 10px; }
+.table, .subtable { width: 100%; border-collapse: collapse; }
+.table th, .table td, .subtable th, .subtable td { border-bottom: 1px solid #eee; padding: 8px; text-align: left; }
+.subtable th { background: #f9f9f9; }

@@ -1,0 +1,227 @@
+:root {
+    --red: #D32F2F;
+    --dark: #111;
+    --white: #fff;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    color: var(--dark);
+    background: #f8f8f8;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.header {
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.logo {
+    height: 40px;
+}
+
+.nav {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.login-button {
+    background: var(--red);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+}
+
+.burger {
+    display: none;
+    font-size: 2rem;
+    background: none;
+    border: none;
+    color: #000;
+    cursor: pointer;
+    z-index: 0;
+    margin-top: 7adpx;
+}
+.hero {
+    position: relative;
+    background: linear-gradient(135deg, var(--red), var(--dark));
+    color: white;
+    padding: 4rem 2rem;
+}
+
+.overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    opacity: 0.15;
+    background-repeat: no-repeat;
+    background-image: url('../assets/ludimus.png');
+    background-size: 650px;
+    background-position: center;
+    z-index: 0;
+}
+.hero-content {
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: auto;
+    gap: 2rem;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.hero-text {
+    flex: 1 1 400px;
+}
+
+.hero-text h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.hero-text p {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.slogan-block {
+    margin: 1rem 0;
+    line-height: 2;
+    font-size: 1.5rem;
+}
+
+.red-letter {
+    color: var(--red);
+    font-weight: bold;
+}
+
+.latin {
+    font-style: italic;
+    font-size: 1rem;
+    color: #ddd;
+    margin-bottom: 1.5rem;
+}
+
+.cta {
+    display: inline-block;
+    background: white;
+    color: var(--red);
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.hero-image img {
+    max-width: 400px;
+    width: 100%;
+    border-radius: 12px;
+}
+
+.features, .video, .stats {
+    padding: 4rem 2rem;
+    max-width: 1000px;
+    margin: auto;
+    text-align: center;
+    background: white;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    border-radius: 12px;
+    margin-top: 2rem;
+}
+
+.video-wrapper iframe {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0; left: 0;
+}
+
+.stat-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.stat-grid div {
+    background: #f0f0f0;
+    padding: 2rem;
+    border-radius: 10px;
+    min-width: 150px;
+}
+
+.footer {
+    background: var(--dark);
+    color: white;
+    text-align: center;
+    padding: 2rem;
+}
+
+
+
+@media (max-width: 768px) {
+    .burger {
+        display: block;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+    }
+
+    .nav {
+        flex-direction: column;
+        gap: 2rem;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.95);
+        padding: 2rem;
+        display: none;
+        z-index: 10;
+    }
+
+    .nav.open {
+        display: flex;
+        align-items: center;
+    }
+
+    .nav a,
+    .nav .login-button {
+        font-size: 1.2rem;
+        color: #fff;
+        text-align: center;
+        width: 100%;
+    }
+}
