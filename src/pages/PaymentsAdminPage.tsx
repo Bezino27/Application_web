@@ -90,17 +90,58 @@ export default function PaymentsAdminPage() {
     );
   };
 
+    const collator = useMemo(
+    () => new Intl.Collator("sk", { sensitivity: "base" }),
+    []
+  );
+
+  // pomocná funkcia: zobrazí priezvisko prvé
+  const surnameFirst = (full: string) => {
+    const parts = (full || "").trim().split(/\s+/).filter(Boolean);
+    return parts.length > 1
+      ? `${parts[parts.length - 1]} ${parts.slice(0, -1).join(" ")}`
+      : full || "—";
+  };
+
   const filtered = useMemo(() => {
-    if (!search.trim()) return payments;
-    const q = search.toLowerCase();
-    return payments.filter(
-      (p) =>
-        p.user.name?.toLowerCase().includes(q) ||
-        p.user.username?.toLowerCase().includes(q) ||
-        p.variable_symbol.toLowerCase().includes(q) ||
-        p.description.toLowerCase().includes(q)
-    );
-  }, [payments, search]);
+    let result = [...payments];
+
+    if (search.trim()) {
+      const q = search.toLowerCase();
+      result = result.filter((p) => {
+        const name = (p.user.name || "").toLowerCase();
+        const username = (p.user.username || "").toLowerCase();
+        const vs = (p.variable_symbol || "").toLowerCase();
+        const desc = (p.description || "").toLowerCase();
+        return (
+          name.includes(q) ||
+          username.includes(q) ||
+          vs.includes(q) ||
+          desc.includes(q)
+        );
+      });
+    }
+
+    // zoradenie podľa priezviska → mena
+    result.sort((a, b) => {
+      const tokens = (full: string) => {
+        const parts = (full || "").trim().split(/\s+/).filter(Boolean);
+        const last = parts.length ? parts[parts.length - 1] : "";
+        const first = parts.slice(0, -1).join(" ");
+        return { first, last };
+      };
+
+      const A = tokens(a.user.name || a.user.username);
+      const B = tokens(b.user.name || b.user.username);
+
+      const byLast = collator.compare(A.last, B.last);
+      if (byLast !== 0) return byLast;
+      return collator.compare(A.first, B.first);
+    });
+
+    return result;
+  }, [payments, search, collator]);
+
 
   return (
     <Layout>
@@ -169,7 +210,7 @@ export default function PaymentsAdminPage() {
                     onChange={() => toggleSelect(p.id)}
                   />
                 </td>
-                <td>{p.user.name || p.user.username}</td>
+                <td>{surnameFirst(p.user.name || p.user.username)}</td>
                 <td>{p.variable_symbol}</td>
                 <td>{p.description}</td>
                 <td>{p.amount} €</td>

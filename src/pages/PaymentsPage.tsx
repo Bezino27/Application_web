@@ -43,6 +43,13 @@ export default function PaymentsPage() {
     []
   );
 
+ const surnameFirst = (full: string) => {
+    const parts = (full || "").trim().split(/\s+/).filter(Boolean);
+    return parts.length > 1
+      ? `${parts[parts.length - 1]} ${parts.slice(0, -1).join(" ")}`
+      : full || "—";
+  };
+
   const filtered = useMemo(() => {
     let result = [...members];
 
@@ -72,9 +79,21 @@ export default function PaymentsPage() {
             : collator.compare(b.number, a.number);
         case "name":
         default: {
-          return sortDirection === "asc"
-            ? collator.compare(a.name, b.name)
-            : collator.compare(b.name, a.name);
+          const tokens = (full: string) => {
+            const parts = (full || "").trim().split(/\s+/).filter(Boolean);
+            const last = parts.length ? parts[parts.length - 1] : "";
+            const first = parts.slice(0, -1).join(" ");
+            return { first, last };
+          };
+
+          const A = tokens(a.name);
+          const B = tokens(b.name);
+
+          const byLast = collator.compare(A.last, B.last);
+          if (byLast !== 0)
+            return sortDirection === "asc" ? byLast : -byLast;
+          const byFirst = collator.compare(A.first, B.first);
+          return sortDirection === "asc" ? byFirst : -byFirst;
         }
       }
     });
@@ -136,16 +155,16 @@ export default function PaymentsPage() {
               <th onClick={() => handleSort("all_payments_paid")}>Platby</th>
             </tr>
           </thead>
-          <tbody>
+            <tbody>
             {filtered.map((m) => (
-              <tr key={m.id}>
+                <tr key={m.id}>
                 <td>{m.number}</td>
-                <td>{m.name}</td>
+                <td>{surnameFirst(m.name)}</td>   {/* tu sa zobrazuje Priezvisko Meno */}
                 <td>{formatBirth(m.birth_date)}</td>
                 <td>{m.all_payments_paid ? "✅" : "❌"}</td>
-              </tr>
+                </tr>
             ))}
-          </tbody>
+            </tbody>
         </table>
       )}
     </Layout>
