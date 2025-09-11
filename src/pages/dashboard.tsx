@@ -116,7 +116,7 @@ export default function DashboardPage() {
 
             <input
                 type="text"
-                placeholder="🔍 Hľadať meno alebo číslo…"
+                placeholder="🔍 Hľadať meno alebo číslo"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="search-input"
