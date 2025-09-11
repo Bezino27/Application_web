@@ -5,7 +5,9 @@ import DashboardPage from './pages/dashboard';
 import AdminCategoriesPage from './pages/AdminCategoriesPage';
 import PaymentsCreatePage from './pages/PaymentsCreate';
 import AdminOrdersPage from "./pages/AdminOrdersPage.tsx";
-
+import PaymentsPage from './pages/PaymentsPage.tsx';
+import UploadStatementPage from './pages/UploadStatementPage.tsx';
+import PaymentsAdminPage from './pages/PaymentsAdminPage.tsx';
 export default function App() {
     return (
         <Routes>
@@ -15,8 +17,10 @@ export default function App() {
             <Route path="/AdminCategoriesPage" element={<AdminCategoriesPage />} />
             <Route path="/admin/payments/create" element={<PaymentsCreatePage />} />
             <Route path="/AdminOrdersPage" element={<AdminOrdersPage />} />
-
-
+            <Route path="/PaymentsPage" element={<PaymentsPage />} />
+            <Route path="/UploadStatementPage" element={<UploadStatementPage />} />
+            <Route path="/PaymentsAdminPage" element={<PaymentsAdminPage />} />
+        
         </Routes>
     );
 }

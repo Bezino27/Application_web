@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { fetchWithAuth } from '../fetchWithAuth';
 import Layout from '../components/layout.tsx';
 import './PaymentsCreate.css';
+import { useNavigate } from "react-router-dom";
 
 type Member = {
     id: number;
@@ -22,6 +23,7 @@ export default function PaymentsCreatePage() {
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
     const [onlyNew, setOnlyNew] = useState(false);  // 👈 filter "noví bez platieb"
+    const navigate = useNavigate();
 
     const [selectedIds, setSelectedIds] = useState<number[]>([]);
     const [amount, setAmount] = useState<string>('');
@@ -192,6 +194,21 @@ export default function PaymentsCreatePage() {
 
     return (
         <Layout>
+            {/* Podnavigácia */}
+            <div className="subnav">
+                <button onClick={() => navigate("/PaymentsPage")}>
+                    Zoznam členov
+                </button>
+                <button onClick={() => navigate("/UploadStatementPage")}>
+                     📂 Nahrať výpis z účtu
+                </button>
+                <button onClick={() => navigate("/PaymentsAdminPage")}>
+                    ✅ Kontrola platieb
+                </button>
+                <button onClick={() => navigate("/admin/payments/create")}>
+                    ➕ Vytvoriť platbu
+                </button>
+            </div>
             <div className="payments-create">
                 <h1>Vytvoriť platby pre viacerých hráčov</h1>
 

@@ -18,11 +18,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <div className="nav-links">
                     <Link to="/dashboard">Členovia</Link>
                     <Link to="/AdminCategoriesPage">Kategórie</Link>
-                    <Link to="/payments">Platby</Link>
-                    <Link to="/admin/payments/create">Vytvoriť platby</Link>
+                    <Link to="/PaymentsPage">Platby</Link>
                     <Link to="/AdminOrdersPage">Objednávky</Link>
 
-                    <button onClick={handleLogout}>Odhlásiť sa</button>
+                    <button className="logout-btn" onClick={handleLogout}>
+                        Odhlásiť sa
+                    </button>
                 </div>
             </nav>
             <main className="layout-content">{children}</main>
