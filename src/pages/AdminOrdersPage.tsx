@@ -22,10 +22,10 @@ type AdminOrderItem = {
 type AdminOrder = {
     id: number;
     user: number;
-    username: string;
+    full_name: string;
     club: number;
     club_name: string;
-    status: 'new' | 'processing' | 'done' | 'canceled';
+    status: 'Nová' | 'Spacováva sa' | 'Objednaná' | 'Doručená'| 'Zrušená';
     is_paid: boolean;
     note: string;
     created_at: string;
@@ -49,8 +49,9 @@ export default function AdminClubOrdersPage() {
     const [loading, setLoading] = useState(true);
     const [status, setStatus] = useState<AdminOrder['status'] | ''>('');
     const [expanded, setExpanded] = useState<Record<number, boolean>>({});
-    const [editing, setEditing] = useState<Record<number, { total: string; status: AdminOrder['status'] }>>({});
-
+    const [editing, setEditing] = useState<
+        Record<number, { total: string; status: AdminOrder['status']; is_paid: boolean }>
+    >({});
     const fetchOrders = async () => {
         setLoading(true);
         const qs = new URLSearchParams();
@@ -61,9 +62,13 @@ export default function AdminClubOrdersPage() {
             setOrders(data);
             const init: typeof editing = {};
             for (const o of data) {
-                init[o.id] = { total: String(o.total_amount ?? '0.00'), status: o.status };
+                init[o.id] = { 
+                    total: String(o.total_amount ?? '0.00'), 
+                    status: o.status, 
+                    is_paid: o.is_paid   // ✅ pridané
+                };
             }
-            setEditing(init);
+setEditing(init);
         }
         setLoading(false);
     };
@@ -77,44 +82,47 @@ export default function AdminClubOrdersPage() {
         setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
     };
 
-    const handleEditChange = (orderId: number, field: 'total' | 'status', value: string) => {
+    const handleEditChange = (
+    orderId: number, 
+    field: 'total' | 'status' | 'is_paid', 
+    value: string | boolean
+    ) => {
         setEditing((prev) => ({
             ...prev,
             [orderId]: { ...prev[orderId], [field]: value },
         }));
     };
 
-    const saveOrderUpdate = async (orderId: number) => {
-        const edit = editing[orderId];
-        const total = parseFloat(edit.total);
+const saveOrderUpdate = async (orderId: number) => {
+    const edit = editing[orderId];
+    const total = parseFloat(edit.total);
 
-        if (isNaN(total)) {
-            alert("Neplatná hodnota pre sumu.");
-            return;
-        }
+    if (isNaN(total)) {
+        alert("Neplatná hodnota pre sumu.");
+        return;
+    }
 
-        const body = {
-            status: edit.status,
-            total_amount: total,
-            is_paid: false, // Ak chceš neskôr pridať checkbox
-            note: `Celková suma upravená na ${total.toFixed(2)} €`
-        };
-
-        console.log("Odosielam PUT", body);
-
-        const res = await fetchWithAuth(`/order/${orderId}/`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body),
-        });
-
-        if (res.ok) {
-            await fetchOrders();
-        } else {
-            const text = await res.text();
-            alert('Nepodarilo sa uložiť objednávku.\n\n' + text);
-        }
+    const body = {
+        status: edit.status,
+        total_amount: total,
+        is_paid: edit.is_paid,  // ✅ pridané
     };
+
+    console.log("Odosielam PUT", body);
+
+    const res = await fetchWithAuth(`/order/${orderId}/`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+    });
+
+    if (res.ok) {
+        await fetchOrders();
+    } else {
+        const text = await res.text();
+        alert('Nepodarilo sa uložiť objednávku.\n\n' + text);
+    }
+};
 
     return (
         <Layout>
@@ -127,10 +135,11 @@ export default function AdminClubOrdersPage() {
                         onChange={(e) => setStatus(e.target.value as AdminOrder['status'] | '')}
                     >
                         <option value="">Všetky</option>
-                        <option value="new">Nové</option>
-                        <option value="processing"> Prijatá adminom</option>
-                        <option value="done">Objednané</option>
-                        <option value="canceled">Zrušené</option>
+                        <option value="Nová">Nové</option>
+                        <option value="Spracováva sa"> Prijatá adminom</option>
+                        <option value="Objednaná">Objednané</option>
+                        <option value="Doručená">Doručená</option>
+                        <option value="Zrušená">Zrušené</option>
                     </select>
                     <button onClick={fetchOrders}>Obnoviť</button>
                 </div>
@@ -155,96 +164,109 @@ export default function AdminClubOrdersPage() {
                         </tr>
                         </thead>
                         <tbody>
-                        {orders.map((o) => {
-                            const isEditing = editing[o.id];
-                            return (
-                                <Fragment key={o.id}>
-                                    <tr>
-                                        <td>{o.id}</td>
-                                        <td>{formatSK(o.created_at)}</td>
-                                        <td>
-                                            <select
-                                                value={isEditing?.status ?? o.status}
-                                                onChange={(e) =>
-                                                    handleEditChange(o.id, 'status', e.target.value)
-                                                }
-                                            >
-                                                <option value="new">Nové</option>
-                                                <option value="processing"> Prijatá adminom</option>
-                                                <option value="done">Objednané</option>
-                                                <option value="canceled">Zrušené</option>
-                                            </select>
-                                        </td>
-                                        <td>{o.is_paid ? 'Áno' : 'Nie'}</td>
-                                        <td>{o.username}</td>
-                                        <td>
-                                            <input
-                                                type="number"
-                                                step="0.01"
-                                                value={isEditing?.total}
-                                                onChange={(e) =>
-                                                    handleEditChange(o.id, 'total', e.target.value)
-                                                }
-                                                style={{ width: 80 }}
-                                            /> €
-                                        </td>
-                                        <td>
-                                            <button onClick={() => toggle(o.id)}>
-                                                {expanded[o.id] ? 'Skryť' : 'Detail'}
-                                            </button>
-                                            <button onClick={() => saveOrderUpdate(o.id)}>
-                                                Uložiť
-                                            </button>
-                                        </td>
-                                    </tr>
+                       {orders.map((o) => {
+    const isEditing = editing[o.id];
+    return (
+        <Fragment key={o.id}>
+            <tr>
+                <td>{o.id}</td>
+                <td>{formatSK(o.created_at)}</td>
+                <td>
+                    <select
+                        value={isEditing?.status ?? o.status}
+                        onChange={(e) =>
+                            handleEditChange(o.id, 'status', e.target.value)
+                        }
+                    >
+                        <option value="Nová">Nové</option>
+                        <option value="Spracováva sa">Spracováva sa</option>
+                        <option value="Objednaná">Objednaná</option>
+                        <option value="Doručená">Doručená</option>
+                        <option value="Zrušená">Zrušené</option>
 
-                                    {expanded[o.id] && (
-                                        <tr>
-                                            <td colSpan={7} style={{ background: '#fafafa' }}>
-                                                <div style={{ padding: 12 }}>
-                                                    {o.note && (
-                                                        <div style={{ marginBottom: 8 }}>
-                                                            <b>Poznámka:</b> {o.note}
-                                                        </div>
-                                                    )}
-                                                    <table className="subtable">
-                                                        <thead>
-                                                        <tr>
-                                                            <th>Produkt</th>
-                                                            <th>Kód</th>
-                                                            <th>Typ</th>
-                                                            <th>Parametre</th>
-                                                            <th>Množstvo</th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        {o.items.map((it) => {
-                                                            const qty = Number(it.quantity ?? 1);
-                                                            return (
-                                                                <tr key={it.id}>
-                                                                    <td>{it.product_name || '-'}</td>
-                                                                    <td>{it.product_code || '-'}</td>
-                                                                    <td>{it.product_type}</td>
-                                                                    <td>
-                                                                        {[
-                                                                            it.size && `veľ.: ${it.size}`,
-                                                                            it.height && `výš.: ${it.height}`,
-                                                                            it.side && `str.: ${it.side}`,
-                                                                        ].filter(Boolean).join(', ') || '-'}
-                                                                    </td>
-                                                                    <td>{qty}</td>
-                                                                </tr>
-                                                            );
-                                                        })}
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    )}
-                                </Fragment>
-                            );
-                        })}
+                    </select>
+                </td>
+                <td>
+                <input
+                type="checkbox"
+                checked={isEditing?.is_paid ?? o.is_paid}
+                onChange={(e) =>
+                    handleEditChange(o.id, 'is_paid', e.target.checked) // 👈 tu ide priamo boolean
+                }
+                />
+                {(isEditing?.is_paid ?? o.is_paid) ? "Áno" : "Nie"}
+                </td>
+                <td>{o.full_name}</td>
+                <td>
+                    <input
+                        type="number"
+                        step="0.01"
+                        value={isEditing?.total}
+                        onChange={(e) =>
+                            handleEditChange(o.id, 'total', e.target.value)
+                        }
+                        style={{ width: 80 }}
+                    /> €
+                </td>
+                <td>
+                    <button onClick={() => toggle(o.id)}>
+                        {expanded[o.id] ? 'Skryť' : 'Detail'}
+                    </button>
+                    <button onClick={() => saveOrderUpdate(o.id)}>
+                        Uložiť
+                    </button>
+                </td>
+            </tr>
+
+            {expanded[o.id] && (
+                <tr>
+                    <td colSpan={7} style={{ background: '#fafafa', textAlign: "left" }}>
+                        <div style={{ padding: 12 }}>
+                            {o.note && (
+                                <div style={{ marginBottom: 8 }}>
+                                    <b>Poznámka:</b> {o.note}
+                                </div>
+                            )}
+                            <table className="subtable" style={{ width: "100%", textAlign: "left" }}>
+                                <thead>
+                                    <tr>
+                                        <th>Produkt</th>
+                                        <th>Kód</th>
+                                        <th>Typ</th>
+                                        <th>Parametre</th>
+                                        <th>Množstvo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {o.items.map((it) => {
+                                        const qty = Number(it.quantity ?? 1);
+                                        return (
+                                            <tr key={it.id}>
+                                                <td>{it.product_name || '-'}</td>
+                                                <td>{it.product_code || '-'}</td>
+                                                <td>{it.product_type}</td>
+                                                <td>
+                                                    {[
+                                                        it.size && `veľ.: ${it.size}`,
+                                                        it.height && `výš.: ${it.height}`,
+                                                        it.side && `str.: ${it.side}`,
+                                                    ]
+                                                        .filter(Boolean)
+                                                        .join(', ') || '-'}
+                                                </td>
+                                                <td>{qty}</td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            )}
+        </Fragment>
+    );
+})}
                         </tbody>
                     </table>
                 </div>
