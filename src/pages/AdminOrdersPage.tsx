@@ -17,6 +17,8 @@ type AdminOrderItem = {
     unit_price?: number | string;
     note?: string;
     line_total?: number | string;
+    is_canceled?: boolean;
+
 };
 
 type AdminOrder = {
@@ -240,21 +242,61 @@ const saveOrderUpdate = async (orderId: number) => {
                                 <tbody>
                                     {o.items.map((it) => {
                                         const qty = Number(it.quantity ?? 1);
+
+                                        const handleCancelItem = async (itemId: number) => {
+                                        if (!window.confirm("Naozaj chceš zrušiť túto položku?")) return;
+
+                                        try {
+                                            const res = await fetchWithAuth(`/order-items/${itemId}/cancel/`, {
+                                            method: "POST",
+                                            });
+                                            if (res.ok) {
+                                            const data = await res.json();
+                                            alert(data.detail || "✅ Položka bola zrušená");
+                                            await fetchOrders();
+                                            } else {
+                                            const text = await res.text();
+                                            alert("❌ Nepodarilo sa zrušiť položku:\n" + text);
+                                            }
+                                        } catch (err) {
+                                            console.error("Chyba pri rušení položky", err);
+                                            alert("Chyba pri spojení so serverom.");
+                                        }
+                                        };
+
                                         return (
-                                            <tr key={it.id}>
-                                                <td>{it.product_name || '-'}</td>
-                                                <td>{it.product_code || '-'}</td>
-                                                <td>{it.product_type}</td>
-                                                <td>
-                                                    {[
-                                                        it.size && `veľ.: ${it.size}`,
-                                                        it.height && `výš.: ${it.height}`,
-                                                        it.side && `str.: ${it.side}`,
-                                                    ]
-                                                        .filter(Boolean)
-                                                        .join(', ') || '-'}
-                                                </td>
-                                                <td>{qty}</td>
+                                            <tr key={it.id} style={it.is_canceled ? { backgroundColor: "#ffe0e0", textDecoration: "line-through", opacity: 0.6 } : {}}>
+                                            <td>{it.product_name || "-"}</td>
+                                            <td>{it.product_code || "-"}</td>
+                                            <td>{it.product_type}</td>
+                                            <td>
+                                                {[
+                                                it.size && `veľ.: ${it.size}`,
+                                                it.height && `výš.: ${it.height}`,
+                                                it.side && `str.: ${it.side}`,
+                                                ]
+                                                .filter(Boolean)
+                                                .join(", ") || "-"}
+                                            </td>
+                                            <td>{qty}</td>
+                                            <td>
+                                                {!it.is_canceled && (
+                                                <button
+                                                    style={{
+                                                    background: "#D32F2F",
+                                                    color: "white",
+                                                    border: "none",
+                                                    padding: "4px 8px",
+                                                    borderRadius: 4,
+                                                    cursor: "pointer",
+                                                    }}
+                                                    onClick={() => handleCancelItem(it.id)}
+                                                >
+                                                    Zrušiť
+                                                </button>
+                                                )}
+                                                {it.is_canceled && <span style={{ color: "#D32F2F", fontWeight: "bold" }}>Zrušené</span>}
+                                            </td>
                                             </tr>
                                         );
                                     })}
