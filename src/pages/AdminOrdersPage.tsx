@@ -99,37 +99,6 @@ setEditing(init);
         }));
     };
 
-const saveOrderUpdate = async (orderId: number) => {
-    const edit = editing[orderId];
-    const total = parseFloat(edit.total);
-
-    if (isNaN(total)) {
-        alert("Neplatná hodnota pre sumu.");
-        return;
-    }
-
-    const body = {
-        status: edit.status,
-        total_amount: total,
-        is_paid: edit.is_paid,  // ✅ pridané
-    };
-
-    console.log("Odosielam PUT", body);
-
-    const res = await fetchWithAuth(`/order/${orderId}/`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-    });
-
-    if (res.ok) {
-        await fetchOrders();
-    } else {
-        const text = await res.text();
-        alert('Nepodarilo sa uložiť objednávku.\n\n' + text);
-    }
-};
-
 
 const getRowStyle = (status: AdminOrder['status']) => {
   switch (status) {
@@ -214,7 +183,33 @@ const exportToExcel = () => {
                             <option value="Zrušená">Zrušené</option>
                         </select>
                         <button onClick={fetchOrders}>Obnoviť</button>
-                        <button onClick={exportToExcel}>📊 Exportovať Excel</button>
+                        <button onClick={exportToExcel}>Exportovať Excel</button>
+                        <button
+                            onClick={async () => {
+                                const payload = Object.entries(editing).map(([id, e]) => ({
+                                id: Number(id),
+                                status: e.status,
+                                total_amount: parseFloat(e.total),
+                                is_paid: e.is_paid,
+                                }));
+
+                                const res = await fetchWithAuth(`/orders/bulk-update/`, {
+                                method: "PUT",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify(payload),
+                                });
+
+                                if (res.ok) {
+                                alert("✅ Všetky objednávky boli uložené");
+                                await fetchOrders();
+                                } else {
+                                const text = await res.text();
+                                alert("❌ Chyba pri ukladaní:\n" + text);
+                                }
+                            }}
+                            >
+                            Uložiť všetko
+                            </button>
                     </div>
             </div>
 
@@ -285,8 +280,7 @@ const exportToExcel = () => {
                             /> €
                         </td>
                         <td>
-                            <button onClick={() => saveOrderUpdate(o.id)}>Uložiť</button>
-                            <button
+'                            <button
                                 onClick={async () => {
                                 const res = await fetchWithAuth(`/order/${o.id}/generate-payment/`, {
                                 method: "POST",
