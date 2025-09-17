@@ -2,6 +2,9 @@ import { Fragment, useEffect, useState } from 'react';
 import { fetchWithAuth } from '../fetchWithAuth';
 import './AdminOrdersPage.css';
 import Layout from '../components/layout.tsx';
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+
 
 type ProductType = 'stick' | 'apparel' | 'blade' | 'other';
 
@@ -44,6 +47,7 @@ const formatSK = (iso: string) => {
     const mm = String(d.getMinutes()).padStart(2, '0');
     return `${day}.${month}.${year} ${hh}:${mm}`;
 };
+
 
 export default function AdminClubOrdersPage() {
     const [clubId] = useState<number>(1); // nastav podľa kontextu
@@ -126,25 +130,85 @@ const saveOrderUpdate = async (orderId: number) => {
     }
 };
 
+
+const exportToExcel = () => {
+  const rows: any[] = [];
+
+  orders.forEach((o: AdminOrder) => {
+    o.items.forEach((it) => {
+      rows.push({
+        "Číslo objednávky": o.id,
+        "Používateľ": o.full_name,
+        "Stav": o.status,
+        "Dátum": formatSK(o.created_at),
+        "Dátum splatnosti": "", // ak máš, doplň z o.payment?.due_date
+        "Zaplatené": o.is_paid ? "Áno" : "Nie",
+        "Suma (€)": o.total_amount,
+        "Produkt": it.product_name || "-",
+        "Kód": it.product_code || "-",
+        "Typ": it.product_type,
+        "Parametre": [
+          it.size && `veľ.: ${it.size}`,
+          it.height && `výš.: ${it.height}`,
+          it.side && `str.: ${it.side}`,
+        ]
+          .filter(Boolean)
+          .join(", ") || "-",
+        "Množstvo": it.quantity,
+        "Poznámka": o.note || "",
+      });
+    });
+
+    // ak chceš aj riadok pre objednávku bez položiek (ak by boli prázdne)
+    if (o.items.length === 0) {
+      rows.push({
+        "Číslo objednávky": o.id,
+        "Používateľ": o.full_name,
+        "Stav": o.status,
+        "Dátum": formatSK(o.created_at),
+        "Dátum splatnosti": "",
+        "Zaplatené": o.is_paid ? "Áno" : "Nie",
+        "Suma (€)": o.total_amount,
+        "Produkt": "-",
+        "Kód": "-",
+        "Typ": "-",
+        "Parametre": "-",
+        "Množstvo": "-",
+        "Poznámka": o.note || "",
+      });
+    }
+  });
+
+  const worksheet = XLSX.utils.json_to_sheet(rows);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Objednávky");
+
+  const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+  const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+  saveAs(blob, `objednavky_${new Date().toISOString().slice(0, 10)}.xlsx`);
+};
+
+
     return (
         <Layout>
         <div className="page">
             <div className="row between center" style={{ marginBottom: 16 }}>
                 <h2>Objednávky klubu</h2>
-                <div className="row gap">
-                    <select
-                        value={status}
-                        onChange={(e) => setStatus(e.target.value as AdminOrder['status'] | '')}
-                    >
-                        <option value="">Všetky</option>
-                        <option value="Nová">Nové</option>
-                        <option value="Spracováva sa"> Prijatá adminom</option>
-                        <option value="Objednaná">Objednané</option>
-                        <option value="Doručená">Doručená</option>
-                        <option value="Zrušená">Zrušené</option>
-                    </select>
-                    <button onClick={fetchOrders}>Obnoviť</button>
-                </div>
+                    <div className="row gap">
+                        <select
+                            value={status}
+                            onChange={(e) => setStatus(e.target.value as AdminOrder['status'] | '')}
+                        >
+                            <option value="">Všetky</option>
+                            <option value="Nová">Nové</option>
+                            <option value="Spracováva sa"> Prijatá adminom</option>
+                            <option value="Objednaná">Objednané</option>
+                            <option value="Doručená">Doručená</option>
+                            <option value="Zrušená">Zrušené</option>
+                        </select>
+                        <button onClick={fetchOrders}>Obnoviť</button>
+                        <button onClick={exportToExcel}>📊 Exportovať Excel</button>
+                    </div>
             </div>
 
             {loading ? (
