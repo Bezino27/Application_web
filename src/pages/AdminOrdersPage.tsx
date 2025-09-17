@@ -210,16 +210,30 @@ const saveOrderUpdate = async (orderId: number) => {
                         style={{ width: 80 }}
                     /> €
                 </td>
-                <td>
-                    <button onClick={() => toggle(o.id)}>
-                        {expanded[o.id] ? 'Skryť' : 'Detail'}
-                    </button>
-                    <button onClick={() => saveOrderUpdate(o.id)}>
-                        Uložiť
-                    </button>
-                </td>
+            <button onClick={() => toggle(o.id)}>
+                {expanded[o.id] ? 'Skryť' : 'Detail'}
+            </button>
+            <button onClick={() => saveOrderUpdate(o.id)}>Uložiť</button>
+            <button
+                onClick={async () => {
+                const res = await fetchWithAuth(`/order/${o.id}/generate-payment/`, {
+                    method: "POST",
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    alert(
+                    `Platba vygenerovaná ✅\n\nVS: ${data.vs}\nIBAN: ${data.iban}\nSuma: ${data.amount} €`
+                    );
+                } else {
+                    const text = await res.text();
+                    alert("❌ Chyba:\n" + text);
+                }
+                }}
+                style={{ background: "#4CAF50", color: "white", marginLeft: 5 }}
+            >
+                💳 Vytvoriť platbu
+            </button>
             </tr>
-
             {expanded[o.id] && (
                 <tr>
                     <td colSpan={7} style={{ background: '#fafafa', textAlign: "left" }}>
