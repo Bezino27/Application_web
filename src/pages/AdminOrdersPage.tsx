@@ -30,7 +30,7 @@ type AdminOrder = {
     full_name: string;
     club: number;
     club_name: string;
-    status: 'Nová' | 'Spacováva sa' | 'Objednaná' | 'Doručená'| 'Zrušená';
+    status: 'Nová' | 'Spracováva sa' | 'Objednaná' | 'Doručená'| 'Zrušená';
     is_paid: boolean;
     note: string;
     created_at: string;
@@ -131,6 +131,23 @@ const saveOrderUpdate = async (orderId: number) => {
 };
 
 
+const getRowStyle = (status: AdminOrder['status']) => {
+  switch (status) {
+    case 'Nová': return { backgroundColor: '#f49b9bff' };       // červená
+    case 'Spracováva sa': return { backgroundColor: '#d6ba81ff' }; // oranžová
+    case 'Objednaná': return { backgroundColor: '#e6ffcdff' };  // žltá
+    case 'Doručená': return { backgroundColor: '#00f83aff' };   // zelená
+    case 'Zrušená': return { backgroundColor: '#6c6c6cff' };    // sivá
+    default: return {};
+  }
+};
+
+
+
+const sortedOrders = [...orders].sort(
+  (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+);
+
 const exportToExcel = () => {
   const rows: any[] = [];
 
@@ -139,14 +156,9 @@ const exportToExcel = () => {
       rows.push({
         "Číslo objednávky": o.id,
         "Používateľ": o.full_name,
-        "Stav": o.status,
         "Dátum": formatSK(o.created_at),
-        "Dátum splatnosti": "", // ak máš, doplň z o.payment?.due_date
-        "Zaplatené": o.is_paid ? "Áno" : "Nie",
-        "Suma (€)": o.total_amount,
         "Produkt": it.product_name || "-",
         "Kód": it.product_code || "-",
-        "Typ": it.product_type,
         "Parametre": [
           it.size && `veľ.: ${it.size}`,
           it.height && `výš.: ${it.height}`,
@@ -164,14 +176,9 @@ const exportToExcel = () => {
       rows.push({
         "Číslo objednávky": o.id,
         "Používateľ": o.full_name,
-        "Stav": o.status,
         "Dátum": formatSK(o.created_at),
-        "Dátum splatnosti": "",
-        "Zaplatené": o.is_paid ? "Áno" : "Nie",
-        "Suma (€)": o.total_amount,
         "Produkt": "-",
         "Kód": "-",
-        "Typ": "-",
         "Parametre": "-",
         "Množstvo": "-",
         "Poznámka": o.note || "",
@@ -220,84 +227,86 @@ const exportToExcel = () => {
                     <table className="table">
                         <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Dátum</th>
-                            <th>Stav</th>
-                            <th>Zaplatené</th>
+                            <th>Číslo objednávky</th>
                             <th>Používateľ</th>
-                            <th>Spolu (€)</th>
-                            <th></th>
+                            <th>Stav</th>
+                            <th>Dátum</th>
+                            <th>Dátum splatnosti</th>
+                            <th>Zaplatené</th>
+                            <th>Suma (€)</th>
+                            <th>Akcie</th>
                         </tr>
                         </thead>
                         <tbody>
-                       {orders.map((o) => {
-    const isEditing = editing[o.id];
-    return (
-        <Fragment key={o.id}>
-            <tr>
-                <td>{o.id}</td>
-                <td>{formatSK(o.created_at)}</td>
-                <td>
-                    <select
-                        value={isEditing?.status ?? o.status}
-                        onChange={(e) =>
-                            handleEditChange(o.id, 'status', e.target.value)
-                        }
-                    >
-                        <option value="Nová">Nové</option>
-                        <option value="Spracováva sa">Spracováva sa</option>
-                        <option value="Objednaná">Objednaná</option>
-                        <option value="Doručená">Doručená</option>
-                        <option value="Zrušená">Zrušené</option>
-
-                    </select>
-                </td>
-                <td>
-                <input
-                type="checkbox"
-                checked={isEditing?.is_paid ?? o.is_paid}
-                onChange={(e) =>
-                    handleEditChange(o.id, 'is_paid', e.target.checked) // 👈 tu ide priamo boolean
-                }
-                />
-                {(isEditing?.is_paid ?? o.is_paid) ? "Áno" : "Nie"}
-                </td>
-                <td>{o.full_name}</td>
-                <td>
-                    <input
-                        type="number"
-                        step="0.01"
-                        value={isEditing?.total}
-                        onChange={(e) =>
-                            handleEditChange(o.id, 'total', e.target.value)
-                        }
-                        style={{ width: 80 }}
-                    /> €
-                </td>
-            <button onClick={() => toggle(o.id)}>
-                {expanded[o.id] ? 'Skryť' : 'Detail'}
-            </button>
-            <button onClick={() => saveOrderUpdate(o.id)}>Uložiť</button>
-            <button
-                onClick={async () => {
-                const res = await fetchWithAuth(`/order/${o.id}/generate-payment/`, {
-                    method: "POST",
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    alert(
-                    `Platba vygenerovaná ✅\n\nVS: ${data.vs}\nIBAN: ${data.iban}\nSuma: ${data.amount} €`
-                    );
-                } else {
-                    const text = await res.text();
-                    alert("❌ Chyba:\n" + text);
-                }
-                }}
-                style={{ background: "#4CAF50", color: "white", marginLeft: 5 }}
-            >
-                💳 Vytvoriť platbu
-            </button>
-            </tr>
+                       {sortedOrders.map((o) => {
+                            const isEditing = editing[o.id];
+                            return (
+                                <Fragment key={o.id}>
+                                    <tr
+                                    onClick={() => toggle(o.id)}
+                                    style={{ cursor: "pointer", ...getRowStyle(isEditing?.status ?? o.status) }}
+                                    >                        <td>{o.id}</td>
+                        <td>{o.full_name}</td>
+                        <td>
+                            <select
+                            value={isEditing?.status ?? o.status}
+                            onChange={(e) =>
+                                handleEditChange(o.id, 'status', e.target.value)
+                            }
+                            >
+                            <option value="Nová">Nové</option>
+                            <option value="Spracováva sa">Spracováva sa</option>
+                            <option value="Objednaná">Objednaná</option>
+                            <option value="Doručená">Doručená</option>
+                            <option value="Zrušená">Zrušené</option>
+                            </select>
+                        </td>
+                        <td>{formatSK(o.created_at)}</td>
+                        <td>-</td> {/* dátum splatnosti ak máš, zatiaľ placeholder */}
+                        <td>
+                            <input
+                            type="checkbox"
+                            checked={isEditing?.is_paid ?? o.is_paid}
+                            onChange={(e) =>
+                                handleEditChange(o.id, 'is_paid', e.target.checked)
+                            }
+                            />
+                            {(isEditing?.is_paid ?? o.is_paid) ? "Áno" : "Nie"}
+                        </td>
+                        <td>
+                            <input
+                            type="number"
+                            step="0.01"
+                            value={isEditing?.total}
+                            onChange={(e) =>
+                                handleEditChange(o.id, 'total', e.target.value)
+                            }
+                            style={{ width: 80 }}
+                            /> €
+                        </td>
+                        <td>
+                            <button onClick={() => saveOrderUpdate(o.id)}>Uložiť</button>
+                            <button
+                                onClick={async () => {
+                                const res = await fetchWithAuth(`/order/${o.id}/generate-payment/`, {
+                                method: "POST",
+                                });
+                                if (res.ok) {
+                                const data = await res.json();
+                                alert(
+                                    `Platba vygenerovaná ✅\n\nVS: ${data.vs}\nIBAN: ${data.iban}\nSuma: ${data.amount} €`
+                                );
+                                } else {
+                                const text = await res.text();
+                                alert("❌ Chyba:\n" + text);
+                                }
+                            }}
+                            style={{ background: "#4CAF50", color: "white", marginLeft: 5 }}
+                            >
+                            💳 Vytvoriť platbu
+                            </button>
+                        </td>
+                        </tr>
             {expanded[o.id] && (
                 <tr>
                     <td colSpan={7} style={{ background: '#fafafa', textAlign: "left" }}>
