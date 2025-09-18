@@ -238,9 +238,25 @@ const exportToExcel = () => {
                             return (
                                 <Fragment key={o.id}>
                                     <tr
-                                    onClick={() => toggle(o.id)}
-                                    style={{ cursor: "pointer", ...getRowStyle(isEditing?.status ?? o.status) }}
-                                    >                        <td>{o.id}</td>
+                                        onClick={(e) => {
+                                            // aby neotváral detail keď kliknem na button/input/select
+                                            const target = e.target as HTMLElement;
+                                            if (
+                                            target.tagName === "BUTTON" ||
+                                            target.tagName === "INPUT" ||
+                                            target.tagName === "SELECT" ||
+                                            target.closest("button") || // ak klikne na text vnútri buttonu
+                                            target.closest("input") ||
+                                            target.closest("select")
+                                            ) {
+                                            return;
+                                            }
+                                            toggle(o.id);
+                                        }}
+                                        style={{ cursor: "pointer", ...getRowStyle(isEditing?.status ?? o.status) }}
+                                    >                        
+                                    
+                                    <td>{o.id}</td>
                         <td>{o.full_name}</td>
                         <td>
                             <select
@@ -279,27 +295,47 @@ const exportToExcel = () => {
                             style={{ width: 80 }}
                             /> €
                         </td>
-                        <td>
-'                            <button
-                                onClick={async () => {
-                                const res = await fetchWithAuth(`/order/${o.id}/generate-payment/`, {
-                                method: "POST",
-                                });
-                                if (res.ok) {
-                                const data = await res.json();
-                                alert(
-                                    `Platba vygenerovaná ✅\n\nVS: ${data.vs}\nIBAN: ${data.iban}\nSuma: ${data.amount} €`
-                                );
-                                } else {
-                                const text = await res.text();
-                                alert("❌ Chyba:\n" + text);
-                                }
-                            }}
-                            style={{ background: "#4CAF50", color: "white", marginLeft: 5 }}
-                            >
-                            💳 Vytvoriť platbu
-                            </button>
-                        </td>
+<td>
+    <button
+        onClick={async () => {
+            const res = await fetchWithAuth(`/order/${o.id}/generate-payment/`, {
+                method: "POST",
+            });
+            if (res.ok) {
+                const data = await res.json();
+                alert(
+                    `Platba vygenerovaná ✅\n\nVS: ${data.vs}\nIBAN: ${data.iban}\nSuma: ${data.amount} €`
+                );
+            } else {
+                const text = await res.text();
+                alert("❌ Chyba:\n" + text);
+            }
+        }}
+        style={{ background: "#4CAF50", color: "white", marginLeft: 5 }}
+    >
+        💳 Vytvoriť platbu
+    </button>
+    <button
+        onClick={async () => {
+            if (!window.confirm(`Naozaj chceš vymazať objednávku #${o.id}?`)) return;
+
+            const res = await fetchWithAuth(`/order/${o.id}/delete/`, {
+                method: "DELETE",
+            });
+
+            if (res.ok) {
+                alert(`✅ Objednávka #${o.id} bola vymazaná`);
+                await fetchOrders();
+            } else {
+                const text = await res.text();
+                alert("❌ Nepodarilo sa vymazať objednávku:\n" + text);
+            }
+        }}
+        style={{ background: "#D32F2F", color: "white", marginLeft: 5 }}
+    >
+        🗑️ Vymazať
+    </button>
+</td>
                         </tr>
             {expanded[o.id] && (
                 <tr>
