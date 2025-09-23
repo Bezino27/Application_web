@@ -70,9 +70,9 @@ export default function HomePage() {
             <section className="stats" id="stats">
                 <h2>Štatistiky</h2>
                 <div className="stat-grid">
-                    <div><h3>1</h3><p>Zapojený klub</p></div>
-                    <div><h3>100+</h3><p>Aktívnych používateľov</p></div>
-                    <div><h3>30+</h3><p>Zorganizovaných udalostí</p></div>
+                    <div><h3>3</h3><p>Zapojené klub</p></div>
+                    <div><h3>250+</h3><p>Aktívnych používateľov</p></div>
+                    <div><h3>100+</h3><p>Zorganizovaných udalostí</p></div>
                 </div>
             </section>
 
