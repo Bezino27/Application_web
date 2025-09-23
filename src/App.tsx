@@ -12,6 +12,8 @@ import AdminJerseyOrdersPage from './pages/AdminJerseyOrders.tsx';
 import OrderForm from './pages/OrderForm.tsx';
 import PartnerShipPage from './pages/partnership.tsx';
 import About from './pages/About.tsx';
+import Kontakt from './pages/kontakt.tsx';
+
 export default function App() {
     return (
         <Routes>
@@ -28,8 +30,8 @@ export default function App() {
             <Route path="/OrderForm" element={<OrderForm />} />
             <Route path="/PartnerShip" element={<PartnerShipPage />} />
             <Route path="/About" element={<About />} />
+            <Route path="/Kontakt" element={<Kontakt />} />
 
-        
         </Routes>
     );
 }

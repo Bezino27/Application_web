@@ -16,7 +16,6 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
                     <nav className={`nav ${menuOpen ? "open" : ""}`}>
             <a href="/About">O aplikácii</a>
             <Link to="/PartnerShip">Spolupráca</Link>
-            <Link to="/referencie">Referencie</Link>
             <Link to="/kontakt">Kontakt</Link>
             <Link to="/login" className="login-button">
               Prihlásenie
