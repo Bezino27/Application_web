@@ -50,3 +50,31 @@
 .logout-btn:active {
   transform: translateY(0);
 }
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropbtn {
+  cursor: pointer;
+}
+
+.dropdown-content {
+  display: block;
+  position: absolute;
+  background-color: #fff;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: #000;
+  padding: 10px 14px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}

@@ -8,6 +8,7 @@ import AdminOrdersPage from "./pages/AdminOrdersPage.tsx";
 import PaymentsPage from './pages/PaymentsPage.tsx';
 import UploadStatementPage from './pages/UploadStatementPage.tsx';
 import PaymentsAdminPage from './pages/PaymentsAdminPage.tsx';
+import AdminJerseyOrdersPage from './pages/AdminJerseyOrders.tsx';
 export default function App() {
     return (
         <Routes>
@@ -20,6 +21,8 @@ export default function App() {
             <Route path="/PaymentsPage" element={<PaymentsPage />} />
             <Route path="/UploadStatementPage" element={<UploadStatementPage />} />
             <Route path="/PaymentsAdminPage" element={<PaymentsAdminPage />} />
+            <Route path="/AdminJerseyOrders" element={<AdminJerseyOrdersPage />} />
+
         
         </Routes>
     );
