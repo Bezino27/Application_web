@@ -10,7 +10,6 @@ Disallow: /PaymentsCreate
 Disallow: /UploadStatementPage
 Disallow: /AdminCategoriesPage
 Disallow: /AdminOrdersPage
-Disallow: /AdminJerseyOrders
 
 # sitemap
 Sitemap: https://ludimus.sk/sitemap.xml
