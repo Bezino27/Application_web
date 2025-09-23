@@ -1,27 +1,12 @@
 import './index.css';
-import logo from '../assets/nazov-black.png';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import MainLayout from '../components/MainLayout';
 
 export default function HomePage() {
-    const [menuOpen, setMenuOpen] = useState(false);
-
     return (
+        
         <div className="homepage">
-            <header className="header">
-                <div className="header-content">
-                    <img src={logo} alt="Ludimus Logo" className="logo" />
-                    <nav className={`nav ${menuOpen ? 'open' : ''}`}>
-                        <a href="#features">Funkcie</a>
-                        <a href="#values">Hodnoty</a>
-                        <a href="#stats">Štatistiky</a>
-                        <a href="#demo">Ukážka</a>
-                        <Link to="/login" className="login-button">Prihlásenie</Link>
-                    </nav>
-                    <button className="burger" onClick={() => setMenuOpen(!menuOpen)}>☰</button>
-                </div>
-            </header>
-
+            <MainLayout>
             <section className="hero">
                 <div className="overlay" />
                 <div className="hero-content">
@@ -36,11 +21,10 @@ export default function HomePage() {
                             <div><span className="red-letter">M</span>oderný</div>
                             <div><span className="red-letter">U</span>nikátny</div>
                             <div><span className="red-letter">S</span>poľahlivý</div>
-                            <div><span className="red-letter">S</span>poľahlivý</div>
 
                         </div>
                         <p className="latin">Simul ludimus, simul vincimus</p>
-                        <Link to="/login" className="cta">Začať používať</Link>
+                        <Link to="/OrderForm" className="cta">Začať používať</Link>
                     </div>
                 </div>
             </section>
@@ -67,18 +51,57 @@ export default function HomePage() {
                 </div>
             </section>
 
+            <section className="pricing" id="pricing">
+                <h2>Cenník</h2>
+                <p className="pricing-subtitle">Začni úplne zadarmo a presvedč sa sám 👇</p>
+                <div className="pricing-grid">
+                    <div className="pricing-card highlight">
+                        <h3>Štart</h3>
+                        <p className="price">0 €</p>
+                        <p className="period">na 1. mesiac</p>
+                        <ul>
+                            <li>✅ Všetky funkcie bez obmedzenia</li>
+                            <li>✅ Bez viazanosti</li>
+                            <li>✅ Ideálne na vyskúšanie</li>
+                        </ul>
+                        <Link to="/OrderForm" className="pricing-cta">Začni ešte dnes</Link>
+                    </div>
+                    <div className="pricing-card">
+                        <h3>Ročne</h3>
+                        <p className="price">25 €</p>
+                        <p className="period">mesačne (platba ročne)</p>
+                        <ul>
+                            <li>💡 Najvýhodnejšia voľba</li>
+                            <li>✅ Všetky funkcie aplikácie</li>
+                            <li>✅ Podpora klubu a hráčov</li>
+                        </ul>
+                        <Link to="/OrderForm" className="pricing-cta">Začni ešte dnes</Link>
+                    </div>
+                    <div className="pricing-card">
+                        <h3>Flexi</h3>
+                        <p className="price">30 €</p>
+                        <p className="period">mesačne (platba mesačne)</p>
+                        <ul>
+                            <li>✅ Flexibilná platba po mesiacoch</li>
+                            <li>✅ Žiadna viazanosť</li>
+                            <li>✅ Všetky funkcie aplikácie</li>
+                        </ul>
+                        <Link to="/OrderForm" className="pricing-cta">Začni ešte dnes</Link>
+                    </div>
+                </div>
+            </section>
+
             <section className="stats" id="stats">
                 <h2>Štatistiky</h2>
                 <div className="stat-grid">
-                    <div><h3>3</h3><p>Zapojené klub</p></div>
+                    <div><h3>3</h3><p>Zapojené kluby</p></div>
                     <div><h3>250+</h3><p>Aktívnych používateľov</p></div>
                     <div><h3>100+</h3><p>Zorganizovaných udalostí</p></div>
                 </div>
             </section>
+            </MainLayout>
 
-            <footer className="footer">
-                <p>&copy; 2025 Ludimus – Všetky práva vyhradené</p>
-            </footer>
         </div>
+
     );
 }
