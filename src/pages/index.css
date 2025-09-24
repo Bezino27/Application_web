@@ -191,40 +191,6 @@ a {
 
 
 
-@media (max-width: 768px) {
-    .burger {
-        display: block;
-        position: absolute;
-        top: 20px;
-        right: 20px;
-    }
-
-    .nav {
-        flex-direction: column;
-        gap: 2rem;
-        position: absolute;
-        top: 70px;
-        left: 0;
-        right: 0;
-        background: rgba(0, 0, 0, 0.95);
-        padding: 2rem;
-        display: none;
-        z-index: 10;
-    }
-
-    .nav.open {
-        display: flex;
-        align-items: center;
-    }
-
-    .nav a,
-    .nav .login-button {
-        font-size: 1.2rem;
-        color: #fff;
-        text-align: center;
-        width: 100%;
-    }
-}
 
 .order-container {
   background: #fff;
