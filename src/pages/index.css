@@ -179,7 +179,7 @@ a {
     background: #f0f0f0;
     padding: 2rem;
     border-radius: 10px;
-    min-width: 150px;
+    min-width: 250px;
 }
 
 .footer {
@@ -271,4 +271,18 @@ a {
   color: #4CAF50;
   font-size: 30px;
   margin-bottom: 15px;
+}
+
+
+@media (max-width: 768px) {
+    .overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    opacity: 0.15;
+    background-repeat: no-repeat;
+    background-image: url('../assets/ludimus.png');
+    background-size: 450px;
+    background-position: center;
+    z-index: 0;
+}
 }
