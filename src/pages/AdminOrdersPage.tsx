@@ -59,9 +59,16 @@ export default function AdminClubOrdersPage() {
         Record<number, { total: string; status: AdminOrder['status']; is_paid: boolean }>
     >({});
     const fetchOrders = async () => {
-        setLoading(true);
-        const qs = new URLSearchParams();
-        if (status) qs.set('status', status);
+    setLoading(true);
+    const qs = new URLSearchParams();
+
+    // ak si admin zvolí filter, použijeme ten
+    if (status) {
+        qs.set('status', status);
+    } else {
+        // inak defaultne zobraz len nevybavené
+        qs.set('status__in', ['Nová', 'Spracováva sa', 'Objednaná'].join(','));
+    }
         const res = await fetchWithAuth(`/club-orders/${clubId}/?${qs.toString()}`);
         if (res.ok) {
             const data = await res.json();
@@ -82,6 +89,7 @@ setEditing(init);
     useEffect(() => {
         fetchOrders();
         // eslint-disable-next-line react-hooks/exhaustive-deps
+        
     }, [status]);
 
     const toggle = (id: number) => {
