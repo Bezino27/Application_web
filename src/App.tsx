@@ -13,6 +13,7 @@ import OrderForm from './pages/OrderForm.tsx';
 import PartnerShipPage from './pages/partnership.tsx';
 import About from './pages/About.tsx';
 import Kontakt from './pages/kontakt.tsx';
+import ResetPasswordPage from './pages/reset-password.tsx';
 
 export default function App() {
     return (
@@ -31,6 +32,8 @@ export default function App() {
             <Route path="/PartnerShip" element={<PartnerShipPage />} />
             <Route path="/About" element={<About />} />
             <Route path="/Kontakt" element={<Kontakt />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
+
 
         </Routes>
     );
