@@ -1,53 +1,36 @@
 import { useState } from "react";
-import { BASE_URL } from "../api";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { BASE_URL } from "../api"; // uprav podľa cesty v tvojom webe
 
-export default function ForgotPasswordPage() {
-  const [email, setEmail] = useState("");
-  const [accounts, setAccounts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
+export default function ResetPasswordPage() {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const token = searchParams.get("token");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSubmit = async () => {
-    if (!email) {
-      alert("Zadaj email");
+    if (!password || !confirmPassword) {
+      alert("Vyplň všetky polia");
       return;
     }
-    setLoading(true);
-    try {
-      const res = await fetch(`${BASE_URL}/password_reset/request/`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      const data = await res.json();
-
-      if (res.ok && data.multiple) {
-        // viac účtov
-        setAccounts(data.accounts);
-      } else if (res.ok) {
-        alert("✅ Over si email – link na reset hesla bol odoslaný.");
-      } else {
-        alert(data.detail || "Nepodarilo sa odoslať požiadavku.");
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Chyba pri spájaní so serverom");
-    } finally {
-      setLoading(false);
+    if (password !== confirmPassword) {
+      alert("Heslá sa nezhodujú");
+      return;
     }
-  };
 
-  const handleSelectAccount = async (userId: number) => {
     try {
-      const res = await fetch(`${BASE_URL}/password_reset/generate_for_user/`, {
+        const res = await fetch(`${BASE_URL}/password_reset/confirm_custom/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_id: userId }),
-      });
-      const data = await res.json();
+        body: JSON.stringify({ token, password }),
+        });
       if (res.ok) {
-        alert("✅ Over si email – link pre vybraný účet bol odoslaný.");
+        alert("✅ Heslo bolo úspešne zmenené");
+        navigate("/login");
       } else {
-        alert(data.detail || "Nepodarilo sa vygenerovať reset link.");
+        const data = await res.json().catch(() => ({}));
+        alert(data.detail || "Nepodarilo sa zmeniť heslo.");
       }
     } catch (err) {
       console.error(err);
@@ -59,48 +42,22 @@ export default function ForgotPasswordPage() {
     <div style={{ maxWidth: 400, margin: "100px auto", padding: 20 }}>
       <h2>Obnova hesla</h2>
       <input
-        type="email"
-        placeholder="Zadaj email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        type="password"
+        placeholder="Nové heslo"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
         style={{ display: "block", width: "100%", marginBottom: 10, padding: 8 }}
       />
-      <button
-        onClick={handleSubmit}
-        disabled={loading}
-        style={{
-          padding: 10,
-          background: "#D32F2F",
-          color: "#fff",
-          border: "none",
-          width: "100%",
-          marginBottom: 20,
-        }}
-      >
-        {loading ? "Odosielam..." : "Odoslať"}
+      <input
+        type="password"
+        placeholder="Potvrď nové heslo"
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+        style={{ display: "block", width: "100%", marginBottom: 10, padding: 8 }}
+      />
+      <button onClick={handleSubmit} style={{ padding: 10, background: "#D32F2F", color: "#fff", border: "none", width: "100%" }}>
+        Uložiť heslo
       </button>
-
-      {accounts.length > 0 && (
-        <div>
-          <p>Nájdené viaceré účty, vyber prosím konkrétny:</p>
-          {accounts.map((acc) => (
-            <div key={acc.id} style={{ marginBottom: 10 }}>
-              <button
-                onClick={() => handleSelectAccount(acc.id)}
-                style={{
-                  padding: 8,
-                  background: "#555",
-                  color: "#fff",
-                  border: "none",
-                  width: "100%",
-                }}
-              >
-                {acc.full_name || acc.username}
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   );
 }
