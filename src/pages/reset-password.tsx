@@ -20,12 +20,11 @@ export default function ResetPasswordPage() {
     }
 
     try {
-      const res = await fetch(`${BASE_URL}/password_reset/confirm/`, {
+        const res = await fetch(`${BASE_URL}/password_reset/confirm_custom/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token, password }),
-      });
-
+        });
       if (res.ok) {
         alert("✅ Heslo bolo úspešne zmenené");
         navigate("/login");
