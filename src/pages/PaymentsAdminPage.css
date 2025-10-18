@@ -1,0 +1,86 @@
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #111;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  gap: 15px;
+}
+
+.actions input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.bulk-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.bulk-btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  color: #fff;
+}
+
+.bulk-btn.green {
+  background-color: #4caf50;
+}
+
+.bulk-btn.red {
+  background-color: #d32f2f;
+}
+
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.styled-table th,
+.styled-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.styled-table th {
+  background: #fafafa;
+}
+
+.status-btn {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.status-btn.green {
+  background: #4caf50;
+  color: #fff;
+}
+
+.status-btn.red {
+  background: #d32f2f;
+  color: #fff;
+}
+
+.status-btn:hover {
+  opacity: 0.9;
+}

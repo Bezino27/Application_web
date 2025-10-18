@@ -1,0 +1,94 @@
+/* ===========================
+   🧩 ŠTÝLY PRE STRÁNKU OCHRANY ÚDAJOV – LUDIMUS
+   =========================== */
+
+.privacy-container {
+  min-height: 100vh;
+  background-color: #fafafa;
+  color: #222;
+  padding: 3rem 1.5rem;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, sans-serif;
+  line-height: 1.6;
+}
+
+/* 🔺 Hlavný nadpis */
+.privacy-container h1 {
+  font-size: 2.2rem;
+  color: #c62828;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+/* 🧾 Sekcie */
+.privacy-container section {
+  margin-bottom: 2.5rem;
+  background: #fff;
+  padding: 1.8rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* 🧩 Nadpis sekcie */
+.privacy-container h2 {
+  font-size: 1.5rem;
+  color: #d32f2f;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+
+/* 📋 Odseky */
+.privacy-container p {
+  margin-bottom: 0.6rem;
+  font-size: 1rem;
+  color: #333;
+}
+
+/* 📑 Zoznamy */
+.privacy-container ul {
+  margin-left: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.privacy-container li {
+  margin-bottom: 0.4rem;
+}
+
+/* ✉️ Odkazy */
+.privacy-container a {
+  color: #d32f2f;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.privacy-container a:hover {
+  color: #b71c1c;
+}
+
+/* 📅 Dátum aktualizácie */
+.privacy-updated {
+  text-align: right;
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 2rem;
+}
+
+/* 💻 Responsivita */
+@media (min-width: 768px) {
+  .privacy-container {
+    padding: 4rem 5rem;
+  }
+
+  .privacy-container h1 {
+    font-size: 2.5rem;
+  }
+
+  .privacy-container h2 {
+    font-size: 1.6rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .privacy-container {
+    padding: 5rem 12rem;
+  }
+}

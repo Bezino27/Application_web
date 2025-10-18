@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+
+# nech sa tieto privátne/admin časti neindexujú
+Disallow: /login
+Disallow: /OrderForm
+Disallow: /dashboard
+Disallow: /PaymentsAdminPage
+Disallow: /PaymentsCreate
+Disallow: /UploadStatementPage
+Disallow: /AdminCategoriesPage
+Disallow: /AdminOrdersPage
+
+# sitemap
+Sitemap: https://ludimus.sk/sitemap.xml

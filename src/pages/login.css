@@ -1,0 +1,189 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #e0e0e0;
+    height: 100vh;
+    padding: 20px;
+}
+
+.login-box {
+    background-color: #fff;
+    padding: 40px 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-title {
+    font-size: 26px;
+    font-weight: bold;
+    color: #111;
+    margin-bottom: 6px;
+}
+
+.login-subtitle {
+    font-size: 15px;
+    color: #555;
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+.login-logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.login-image-large {
+    width: 250px;
+    margin: 0 auto 20px auto;
+    display: block;
+}
+
+.login-logo {
+    width: 220px;
+    margin-bottom: 20px;
+}
+.login-image {
+    width: 80px;
+}
+
+.login-input {
+    width: 80%;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #f9f9f9;
+    transition: border-color 0.2s;
+}
+
+.login-input:focus {
+    border-color: #D32F2F;
+    outline: none;
+}
+
+.login-button {
+    background-color: #D32F2F;
+    color: white;
+    padding: 14px;
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.login-button:hover {
+    background-color: #b92c2c;
+}
+
+.login-button:disabled {
+    background-color: #999;
+    cursor: not-allowed;
+}
+
+.login-error {
+    color: #D32F2F;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+.pricing {
+  padding: 60px 20px;
+  background: #f9f9f9;
+  text-align: center;
+}
+
+.pricing h2 {
+  font-size: 32px;
+  margin-bottom: 10px;
+  color: #111;
+}
+
+.pricing-subtitle {
+  color: #555;
+  font-size: 16px;
+  margin-bottom: 40px;
+  font-style: italic;
+}
+
+.pricing-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+}
+
+.pricing-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 30px 25px;
+  max-width: 300px;
+  flex: 1 1 250px;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.pricing-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+}
+
+.pricing-card.highlight {
+  border: 2px solid #D32F2F;
+}
+
+.pricing-card h3 {
+  font-size: 22px;
+  margin-bottom: 10px;
+  color: #D32F2F;
+}
+
+.price {
+  font-size: 36px;
+  font-weight: bold;
+  color: #111;
+}
+
+.period {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.pricing-card ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.pricing-card ul li {
+  margin-bottom: 10px;
+  font-size: 15px;
+  color: #444;
+}
+
+.pricing-cta {
+  display: block;
+  background-color: #D32F2F;
+  color: #fff;
+  text-decoration: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.pricing-cta:hover {
+  background-color: #b92c2c;
+}

@@ -1,0 +1,121 @@
+:root {
+  --bg: #fff;
+  --text: #111;
+  --muted: #555;
+  --card: #f7f7f7;
+  --border: #e0e0e0;
+  --accent: #D32F2F; /* Ludimus červená */
+}
+
+* { box-sizing: border-box; }
+
+.contact-wrapper {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 32px 20px 60px;
+  color: var(--text);
+}
+
+.contact-hero {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.contact-hero h1 {
+  font-size: 2.2rem;
+  margin: 0 0 10px;
+}
+
+.contact-hero p {
+  font-size: 1.05rem;
+  color: var(--muted);
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.contact-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.contact-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+  border-color: #ccc;
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+  color: var(--accent);
+}
+
+.contact-card h2 {
+  font-size: 1.15rem;
+  margin: 6px 0 0;
+}
+
+.muted { color: var(--muted); }
+.small { font-size: 0.95rem; }
+
+.cta {
+  margin-top: auto;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.contact-extra {
+  margin-top: 28px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px;
+}
+
+.contact-extra .pill {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.8rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-bottom: 10px;
+}
+
+.contact-extra ul {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--text);
+}
+
+.contact-extra li { margin: 8px 0; }
+
+.contact-footer {
+  margin-top: 22px;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* Responsivita */
+@media (max-width: 900px) {
+  .contact-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 600px) {
+  .contact-grid { grid-template-columns: 1fr; }
+  .contact-hero h1 { font-size: 1.8rem; }
+}

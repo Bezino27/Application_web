@@ -1,0 +1,113 @@
+/* ================== LAYOUT ================== */
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  background: #fff;
+  color: #111;
+}
+
+.main-content {
+  flex: 1;
+}
+
+/* ================== HEADER ================== */
+.header {
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  height: 40px;
+  margin-top: 10px;
+}
+
+/* ================== NAVIGATION ================== */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.nav a {
+  text-decoration: none;
+  font-size: 15px;       /* zmenšené z 16px */
+  color: #333;
+  font-weight: 500;
+  transition: color 0.2s ease;
+  white-space: nowrap;   /* zabráni zalomeniu "O aplikácii" */
+}
+
+.nav a:hover {
+  color: #D32F2F;
+}
+
+/* login button */
+.login-button {
+  background: #D32F2F;
+  color: #fff !important;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.login-button:hover {
+  background: #b92c2c;
+}
+
+/* burger menu */
+.burger {
+  display: none;
+  font-size: 26px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* ================== FOOTER ================== */
+.footer {
+  background: #111;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+  font-size: 14px;
+}
+
+/* ================== RESPONSIVE ================== */
+@media (max-width: 768px) {
+  .nav {
+    position: absolute;
+    top: 64px;
+    right: 0;
+    background: #fff;
+    flex-direction: column;
+    width: 200px;
+    padding: 20px;
+    border-left: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    display: none;
+  }
+
+  .nav.open {
+    display: flex;
+  }
+
+  .burger {
+    display: block;
+    color: #111;
+  }
+}

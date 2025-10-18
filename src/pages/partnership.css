@@ -1,0 +1,121 @@
+.partnership-hero {
+  min-height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #ffffff, #f9f9f9);
+}
+
+.hero-content {
+  max-width: 800px;
+}
+
+.partnership-hero h1 {
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: #111;
+}
+
+.partnership-hero p {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 30px;
+}
+
+.hero-cta a {
+  display: inline-block;
+  background: #D32F2F;
+  color: #fff;
+  padding: 12px 28px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.hero-cta a:hover {
+  background: #b92c2c;
+  transform: scale(1.05);
+}
+
+.feature-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  padding: 70px 10%;
+}
+
+.feature-block img {
+  width: 30%;
+  max-width: 340px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.feature-block .text {
+  flex: 1;
+  background: #fff;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  max-width: 520px;
+}
+
+.feature-block h2 {
+  font-size: 28px;
+  margin-bottom: 12px;
+  color: #111;
+}
+
+.feature-block p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #555;
+}
+
+.feature-block.left img { order: 1; }
+.feature-block.left .text { order: 2; }
+.feature-block.right .text { order: 1; }
+.feature-block.right img { order: 2; }
+
+.partnership-cta {
+  text-align: center;
+  padding: 100px 20px;
+  background: #f9f9f9;
+}
+
+.partnership-cta h2 {
+  font-size: 34px;
+  margin-bottom: 20px;
+  color: #111;
+}
+
+.partnership-cta p {
+  font-size: 17px;
+  max-width: 700px;
+  margin: 0 auto 30px auto;
+  color: #555;
+  line-height: 1.7;
+}
+
+.cta-button {
+  display: inline-block;
+  background: #D32F2F;
+  color: #fff;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 18px;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.cta-button:hover {
+  background: #b92c2c;
+}
