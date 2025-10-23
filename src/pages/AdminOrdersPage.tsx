@@ -25,18 +25,20 @@ type AdminOrderItem = {
 };
 
 type AdminOrder = {
-    id: number;
-    user: number;
-    full_name: string;
-    club: number;
-    club_name: string;
-    status: 'Nová' | 'Spracováva sa' | 'Objednaná' | 'Doručená'| 'Zrušená';
-    is_paid: boolean;
-    note: string;
-    created_at: string;
-    total_amount: number | string;
-    items: AdminOrderItem[];
+  id: number;
+  user: number;
+  full_name: string;
+  club: number;
+  club_name: string;
+  status: 'Nová' | 'Spracováva sa' | 'Objednaná' | 'Doručená' | 'Zrušená';
+  is_paid: boolean;
+  note: string;
+  created_at: string;
+  total_amount: number | string;
+  iban?: string; // ← pridaj toto
+  items: AdminOrderItem[];
 };
+
 
 const formatSK = (iso: string) => {
     const d = new Date(iso);
@@ -126,7 +128,7 @@ const sortedOrders = [...orders].sort(
 );
 
 const exportToExcel = () => {
-  const rows: any[] = [];
+  const rows: unknown[] = [];
 
   orders.forEach((o: AdminOrder) => {
     o.items.forEach((it) => {
@@ -236,6 +238,7 @@ const exportToExcel = () => {
                             <th>Dátum</th>
                             <th>Dátum splatnosti</th>
                             <th>Zaplatené</th>
+                            <th>IBAN</th>
                             <th>Suma (€)</th>
                             <th>Akcie</th>
                         </tr>
@@ -292,6 +295,7 @@ const exportToExcel = () => {
                             />
                             {(isEditing?.is_paid ?? o.is_paid) ? "Áno" : "Nie"}
                         </td>
+                        <td>{o.iban || '-'}</td> 
                         <td>
                             <input
                             type="number"

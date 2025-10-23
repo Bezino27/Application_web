@@ -13,6 +13,7 @@ type JerseyOrder = {
   created_at: string;
   amount: number;
   is_paid: boolean;
+  iban?: string;
 };
 
 const formatSK = (iso: string) => {
@@ -114,11 +115,13 @@ export default function AdminJerseyOrdersPage() {
             <table className="table">
               <thead>
                 <tr>
+                  <th>ID</th>
                   <th>Priezvisko</th>
                   <th>Číslo</th>
                   <th>Dres veľkosť</th>
                   <th>Kraťasy veľkosť</th>
                   <th>Dátum</th>
+                  <th>IBAN</th>
                   <th>Suma (€)</th>
                   <th>Zaplatené</th>
                   <th>Akcie</th>
@@ -127,11 +130,13 @@ export default function AdminJerseyOrdersPage() {
               <tbody>
                 {orders.map((o) => (
                   <tr key={o.id}>
+                    <td>{o.id}</td>
                     <td>{o.surname}</td>
                     <td>{o.number}</td>
                     <td>{o.jersey_size}</td>
                     <td>{o.shorts_size}</td>
                     <td>{formatSK(o.created_at)}</td>
+                    <td>{o.iban || "-"}</td>
                     <td>
                       <input
                         type="number"
