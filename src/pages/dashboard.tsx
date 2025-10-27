@@ -67,12 +67,16 @@ export default function DashboardPage() {
     let result = [...members];
     if (search.trim()) {
       const q = search.toLowerCase();
-      result = result.filter(
-        (m) =>
-          `${m.first_name} ${m.last_name}`.toLowerCase().includes(q) ||
-          m.username.toLowerCase().includes(q) ||
-          m.number.toLowerCase().includes(q)
-      );
+    result = result.filter((m) => {
+    const fullName = `${m.first_name || ''} ${m.last_name || ''}`.toLowerCase();
+    return (
+        fullName.includes(q) ||
+        m.username?.toLowerCase().includes(q) ||
+        m.number?.toLowerCase().includes(q) ||
+        m.email?.toLowerCase().includes(q) ||
+        m.email_2?.toLowerCase().includes(q)
+    );
+    });
     }
 
     result.sort((a, b) => {
