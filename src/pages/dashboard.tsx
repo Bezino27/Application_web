@@ -5,6 +5,7 @@ import Layout from '../components/layout.tsx';
 
 type Member = {
   id: number;
+  username: string;
   first_name: string;
   last_name: string;
   birth_date: string;
@@ -15,6 +16,7 @@ type Member = {
 };
 
 type EditForm = {
+  username: string;
   first_name: string;
   last_name: string;
   number: string;
@@ -34,6 +36,7 @@ export default function DashboardPage() {
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
   const [editing, setEditing] = useState<Member | null>(null);
   const [form, setForm] = useState<EditForm>({
+    username: '',
     first_name: '',
     last_name: '',
     number: '',
@@ -67,6 +70,7 @@ export default function DashboardPage() {
       result = result.filter(
         (m) =>
           `${m.first_name} ${m.last_name}`.toLowerCase().includes(q) ||
+          m.username.toLowerCase().includes(q) ||
           m.number.toLowerCase().includes(q)
       );
     }
@@ -117,6 +121,7 @@ export default function DashboardPage() {
   const openEdit = (m: Member) => {
     setEditing(m);
     setForm({
+      username: m.username || '',
       first_name: m.first_name || '',
       last_name: m.last_name || '',
       number: m.number || '',
@@ -149,7 +154,7 @@ export default function DashboardPage() {
 
       <input
         type="text"
-        placeholder="🔍 Hľadať meno alebo číslo"
+        placeholder="🔍 Hľadať meno, číslo alebo username"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         className="search-input"
@@ -161,8 +166,9 @@ export default function DashboardPage() {
         <table className="styled-table">
           <thead>
             <tr>
-              <th onClick={() => handleSort('number')}>#</th>
+              <th>#</th>
               <th onClick={() => handleSort('name')}>Meno</th>
+              <th>Username</th>
               <th>Email</th>
               <th>Email 2</th>
               <th onClick={() => handleSort('birth_date')}>Dátum narodenia</th>
@@ -175,6 +181,7 @@ export default function DashboardPage() {
               <tr key={m.id}>
                 <td>{m.number}</td>
                 <td>{m.last_name} {m.first_name}</td>
+                <td>{m.username}</td>
                 <td>{m.email}</td>
                 <td>{m.email_2 || '—'}</td>
                 <td>{formatBirth(m.birth_date)}</td>
@@ -192,6 +199,12 @@ export default function DashboardPage() {
         <div className="modal-overlay">
           <div className="modal">
             <h2>Upraviť člena</h2>
+
+            <label>Username:</label>
+            <input
+              value={form.username}
+              onChange={(e) => setForm({ ...form, username: e.target.value })}
+            />
 
             <label>Meno:</label>
             <input
