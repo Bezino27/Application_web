@@ -13,6 +13,7 @@ type JerseyOrder = {
   created_at: string;
   amount: number;
   is_paid: boolean;
+  is_completed: boolean;
   iban?: string;
 };
 
@@ -27,7 +28,7 @@ export default function AdminJerseyOrdersPage() {
   const [clubId] = useState<number>(1); // nastav podľa prihláseného admina
   const [orders, setOrders] = useState<JerseyOrder[]>([]);
   const [loading, setLoading] = useState(true);
-
+  const [filter, setFilter] = useState<"all" | "completed" | "incomplete">("incomplete");
   const fetchOrders = async () => {
     setLoading(true);
     const res = await fetchWithAuth(`/clubs/${clubId}/jersey-orders/`);
@@ -45,7 +46,9 @@ export default function AdminJerseyOrdersPage() {
     const payload = orders.map((o) => ({
         id: o.id,
         amount: o.amount,
-        is_paid: Boolean(o.is_paid),   // 🔥 vždy pošli boolean
+        is_paid: Boolean(o.is_paid),
+        is_completed: Boolean(o.is_completed),
+
     }));
 
     const res = await fetchWithAuth(`/jersey-orders/bulk-update/`, {
@@ -93,18 +96,61 @@ export default function AdminJerseyOrdersPage() {
     }
   };
 
-  
+  const paymentNotification = async () => {
+    const unpaidOrders = orders.filter((o) => !o.is_paid);
+
+    if (unpaidOrders.length === 0) {
+      alert("🎉 Všetky objednávky sú už zaplatené!");
+      return;
+    }
+
+    if (!window.confirm(`Odoslať pripomienku ${unpaidOrders.length} používateľom?`)) return;
+
+    const payload = unpaidOrders.map((o) => o.id);
+
+    const res = await fetchWithAuth(`/jersey-orders/remind-unpaid/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ order_ids: payload }),
+    });
+
+    if (res.ok) {
+      alert(`📩 Pripomienka bola odoslaná ${unpaidOrders.length} používateľom.`);
+    } else {
+      const text = await res.text();
+      alert("❌ Chyba pri odosielaní pripomienok:\n" + text);
+    }
+  };
+
 
   return (
     <Layout>
       <div className="page">
-        <div className="row between center" style={{ marginBottom: 16 }}>
-          <h2>Objednávky dresov</h2>
-          <div className="row gap">
-            <button onClick={fetchOrders}>Obnoviť</button>
-            <button onClick={handleSaveAll}>Uložiť všetko</button>
-          </div>
+      <div className="row between center" style={{ marginBottom: 16 }}>
+        {/* ĽAVÁ STRANA – filter */}
+        <div className="row gap">
+          <label>
+            <select
+              value={filter}
+              onChange={(e) =>
+                setFilter(e.target.value as "all" | "completed" | "incomplete")
+              }
+            >
+              <option value="incomplete">Nedokončené</option>
+              <option value="completed">Dokončené</option>
+              <option value="all">Všetky</option>
+            </select>
+          </label>
         </div>
+
+        {/* PRAVÁ STRANA – tlačidlá */}
+        <div className="row gap">
+          <button onClick={paymentNotification}>Pripomenúť zaplatenie</button>
+          <button onClick={fetchOrders}>Obnoviť</button>
+          <button onClick={handleSaveAll}>Uložiť všetko</button>
+        </div>
+      </div>
+
 
         {loading ? (
           <div>Načítavam…</div>
@@ -124,11 +170,19 @@ export default function AdminJerseyOrdersPage() {
                   <th>IBAN</th>
                   <th>Suma (€)</th>
                   <th>Zaplatené</th>
+                  <th>Dokončené</th>
                   <th>Akcie</th>
                 </tr>
               </thead>
               <tbody>
-                {orders.map((o) => (
+                {orders
+                  .filter((o) => {
+                    if (filter === "completed") return o.is_completed;
+                    if (filter === "incomplete") return !o.is_completed;
+                    return true;
+                  })
+                  .sort((a, b) => Number(a.is_completed) - Number(b.is_completed)) // 💡 nech sú nedokončené hore
+                  .map((o) => (
                   <tr key={o.id}>
                     <td>{o.id}</td>
                     <td>{o.surname}</td>
@@ -171,6 +225,22 @@ export default function AdminJerseyOrdersPage() {
                         }}
                       />
                       {o.is_paid ? "Áno" : "Nie"}
+                    </td>
+                                        <td>
+                      <input
+                        type="checkbox"
+                        checked={o.is_completed}
+                        onChange={(e) => {
+                          setOrders((prev) =>
+                            prev.map((ord) =>
+                              ord.id === o.id
+                                ? { ...ord, is_completed: e.target.checked }
+                                : ord
+                            )
+                          );
+                        }}
+                      />
+                      {o.is_completed ? "Áno" : "Nie"}
                     </td>
                     <td>
                       <button
