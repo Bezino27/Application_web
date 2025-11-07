@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap');
+
+.sorry-dark {
+  position: relative;
+  height: 100vh;
+  background: radial-gradient(circle at center, #0a0a0a 0%, #000 90%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Kontajner srdca */
+.heart-container {
+  position: relative;
+  width: 280px;
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* SVG outline animácia */
+.heart-outline {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: #ff004c;
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1600;
+  stroke-dashoffset: 1600;
+  animation: drawHeart 3s ease forwards, heartGlow 2s 2s infinite ease-in-out;
+  filter: drop-shadow(0 0 12px rgba(255, 0, 76, 0.4));
+}
+
+@keyframes drawHeart {
+  from {
+    stroke-dashoffset: 1600;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes heartGlow {
+  0%, 100% {
+    stroke: #ff004c;
+    filter: drop-shadow(0 0 10px #ff004c);
+  }
+  50% {
+    stroke: #ff3366;
+    filter: drop-shadow(0 0 25px #ff3366);
+  }
+}
+
+/* Text v strede */
+.heart-text {
+  position: absolute;
+  text-align: center;
+  color: #fff;
+  opacity: 0;
+  animation: fadeIn 2s ease-out 3.2s forwards;
+}
+
+.heart-text h1 {
+  font-size: 1.9rem;
+  font-weight: 700;
+  text-shadow: 0 0 20px #ff004c;
+}
+
+.heart-text .subtext {
+  margin-top: 10px;
+  font-size: 1rem;
+  opacity: 0;
+  color: #ffb3c6;
+  text-shadow: 0 0 12px rgba(255, 50, 100, 0.4);
+  animation: fadeIn 2s ease-out 4.5s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Emoji okolo */
+.emoji-field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.floating-emoji {
+  position: absolute;
+  animation: emojiFloat 10s linear infinite;
+  opacity: 0.85;
+}
+
+@keyframes emojiFloat {
+  0% {
+    transform: translateY(110vh) rotate(0deg) scale(0.7);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-10vh) rotate(360deg) scale(1);
+    opacity: 0;
+  }
+}

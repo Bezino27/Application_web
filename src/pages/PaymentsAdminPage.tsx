@@ -60,7 +60,7 @@ export default function PaymentsAdminPage() {
       alert("❌ Nepodarilo sa zmeniť stav platby.");
     }
   };
-
+  
   const toggleBulkStatus = async (newStatus: boolean) => {
     try {
       const res = await fetchWithAuth(`/admin-member-payments/`, {
@@ -83,6 +83,8 @@ export default function PaymentsAdminPage() {
       alert("❌ Nepodarilo sa zmeniť stav vybraných platieb.");
     }
   };
+
+  
 
   const toggleSelect = (id: number) => {
     setSelectedIds((prev) =>
