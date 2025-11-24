@@ -88,7 +88,7 @@ const BASE_QUESTIONS: Question[] = [
       { id: "4b", label: "b.", text: "V spracovaní obrazu pomocou neurónových sietí, príznakové mapy môžu byť analyzované na identifikáciu oblastí vstupu, ktoré najviac ovplyvnili rozhodovanie modelu", correct: true },
       { id: "4c", label: "c.", text: "Medzi metódy, ktoré pomáhajú pri zamedzení preučenia radíme nasledujúce postupy: regularizácia modelu, včasné zastavenie, kombinácia modelov, augmentácia dát", correct: true },
       { id: "4d", label: "d.", text: "Vplyv falošne negatívnych príkladov na kvalitu klasifikácie je možné sledovať aj pomocou metriky presnosť", correct: false },
-      { id: "4e", label: "e.", text: "Pri regresných úlohách sa metrika MSE (Mean Squared Error) zameriava na odhad variancie rozdielov medzi skutočnými a predikovanými hodnotami", correct: false },
+      { id: "4e", label: "e.", text: "Pri regresných úlohách sa metrika MSE (Mean Squared Error) zameriava na odhad variancie rozdielov medzi skutočnými a predikovanými hodnotami", correct: true },
     ],
   },
 
