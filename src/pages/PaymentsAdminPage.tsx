@@ -84,6 +84,34 @@ export default function PaymentsAdminPage() {
     }
   };
 
+  const remindUnpaidPayments = async () => {
+  const unpaidPayments = payments.filter((p) => !p.is_paid);
+  if (unpaidPayments.length === 0) {
+    alert("🎉 Všetky platby sú už uhradené!");
+    return;
+  }
+
+  if (!window.confirm(`Odoslať pripomienku ${unpaidPayments.length} neuhradeným členom?`)) return;
+
+  const payload = unpaidPayments.map((p) => p.id);
+
+  try {
+    const res = await fetchWithAuth(`/admin-member-payments/remind-unpaid/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ payment_ids: payload }),
+    });
+
+    if (res.ok) {
+      alert(`📩 Pripomienky boli odoslané ${unpaidPayments.length} členom.`);
+    } else {
+      const text = await res.text();
+      alert("❌ Chyba pri odosielaní pripomienok:\n" + text);
+    }
+  } catch (e) {
+    alert("❌ Serverová chyba pri odosielaní pripomienok.");
+  }
+};
   
 
   const toggleSelect = (id: number) => {
@@ -169,6 +197,13 @@ export default function PaymentsAdminPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
+        <button
+          className="bulk-btn blue"
+          onClick={remindUnpaidPayments}
+          style={{ marginLeft: 10,marginRight: 10, backgroundColor:'red' }}
+        >
+          📩 Pripomenúť neuhradené
+        </button>
         {selectedIds.length > 0 && (
           <div className="bulk-actions">
             <button
