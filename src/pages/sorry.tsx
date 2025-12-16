@@ -1,5 +1,5 @@
 // UnitTest.tsx
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 
 // ------------------------------------------------------------------
 // 🎆 FIREWORKS – FULLSCREEN CANVAS
@@ -122,7 +122,7 @@ const TASKS: Task[] = [
   { question: "1. Koľko gramov je 5 kg?", answer: "5000" },
   { question: "2. Koľko cm je 2 metre?", answer: "200" },
   { question: "3. Koľko mm je 3.5 cm?", answer: "35" },
-  { question: "4. Koľko kg je 3500 g?", answer: "3.5" },
+  { question: "4. Koľko kg je 35000 g?", answer: "35" },
   { question: "5. Koľko metrov je 1200 cm?", answer: "12" },
 ];
 
