@@ -35,7 +35,7 @@ export default function App() {
             <Route path="/Kontakt" element={<Kontakt />} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/policy" element={<PrivacyPolicyPage />} />
-            <Route path="/sorry" element={<SorryPage />} />
+            <Route path="/premenajednotiek" element={<SorryPage />} />
 
 
         </Routes>
