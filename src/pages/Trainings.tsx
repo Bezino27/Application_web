@@ -365,18 +365,6 @@ export default function Trainings() {
     }
   };
 
-  const runNow = async (id: number) => {
-    try {
-      const res = await fetchWithAuth(`/training-schedules/${id}/run-now/`, { method: "POST" });
-      if (!res.ok) throw new Error("run-now failed");
-      const data = await res.json().catch(() => ({}));
-      alert(`✅ Hotovo. Vytvorených tréningov: ${data?.created ?? "?"}`);
-      await fetchTrainings();
-    } catch {
-      alert("❌ Nepodarilo sa spustiť generovanie.");
-    }
-  };
-
   const addItem = () => {
     setDraft((d) => ({
       ...d,
@@ -613,9 +601,6 @@ export default function Trainings() {
                     <div className="actions">
                       <button className="btn" onClick={() => openEdit(s)}>
                         Upraviť
-                      </button>
-                      <button className="btn" onClick={() => runNow(s.id)}>
-                        Vygeneruj teraz
                       </button>
                       <button className="btn danger" onClick={() => deleteSchedule(s.id)}>
                         Zmazať
