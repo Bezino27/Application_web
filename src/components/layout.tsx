@@ -21,6 +21,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     <Link to="/dashboard">Členovia</Link>
                     <Link to="/AdminCategoriesPage">Kategórie</Link>
                     <Link to="/PaymentsPage">Platby</Link>
+                    <Link to="/Trainings">Tréningy</Link>
+
 
                     <div
                         className="dropdown"
