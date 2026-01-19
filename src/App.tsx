@@ -16,7 +16,7 @@ import Kontakt from './pages/kontakt.tsx';
 import ResetPasswordPage from './pages/reset-password.tsx';
 import PrivacyPolicyPage from './pages/privacy.tsx';
 import SorryPage from './pages/sorry.tsx';
-import Trainings from './pages/Trainings.tsx'
+import Trainings from './pages/TrainingsPage.tsx'
 export default function App() {
     return (
         <Routes>
@@ -36,7 +36,7 @@ export default function App() {
             <Route path="/Kontakt" element={<Kontakt />} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/policy" element={<PrivacyPolicyPage />} />
-            <Route path="/premenajednotiek" element={<SorryPage />} />
+            <Route path="/sorry" element={<SorryPage />} />
             <Route path="/trainings" element={<Trainings />} />
 
 
